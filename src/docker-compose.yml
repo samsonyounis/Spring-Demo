@@ -1,0 +1,35 @@
+version: "3"
+services:
+  localhost_db:
+    image: "mysql"
+    restart: always
+    ports:
+      - 3308:3306
+    environment:
+      MYSQL_USER: sam
+      MYSQL_PASSWORD: sam@1996
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: kimu
+
+    networks:
+      - network-example
+
+
+  spring-demo-app:
+    image: spring-demo-image
+    build:
+      context: .
+    restart: always
+    ports:
+      - 9090:9090
+    depends_on:
+      - localhost_db
+    #    environment:
+    #      SPRING_DATASOURCE_URL: jdbc:mysql://localhost_db:3306/kimu
+    networks:
+      - network-example
+
+networks:
+  network-example:
+    external: true
